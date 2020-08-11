@@ -12,6 +12,24 @@ class MovieForm extends Component{
         error: ''
     };
 
+    componentDidMount(){
+        const { id } = this.props.match.params;
+
+        axios
+            .get('/api/movies')
+            .then(res => {
+                this.setState({
+                    ...this.state,
+                    values: {
+                        ...res.data
+                    }
+                });
+            })
+            .catch(err => {
+                console.error('Error: ', err.message);
+            });
+    }
+
     handleChange = e => {
         this.setState({
             ...this.state,
@@ -25,8 +43,16 @@ class MovieForm extends Component{
     handleSubmit = e => {
         e.preventDefault();
 
+        const { id } = this.props.match.params;
+
         axios
-            .put(`/api/movies/${}`)
+            .put(`/api/movies/${id}`, this.state.values)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.error('Error: ', err.message);
+            });
     }
 
     render(){
