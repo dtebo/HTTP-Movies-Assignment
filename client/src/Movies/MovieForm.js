@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+
+import { axiosWithoutAuth } from '../utils/axios';
 
 class MovieForm extends Component{
     state = {
@@ -15,8 +17,8 @@ class MovieForm extends Component{
     componentDidMount(){
         const { id } = this.props.match.params;
 
-        axios
-            .get('/api/movies')
+        axiosWithoutAuth()
+            .get(`/movies/${id}`)
             .then(res => {
                 this.setState({
                     ...this.state,
@@ -34,7 +36,7 @@ class MovieForm extends Component{
         this.setState({
             ...this.state,
             values: {
-                ...this.values,
+                ...this.state.values,
                 [e.target.name]: e.target.value
             }
         });
@@ -45,8 +47,8 @@ class MovieForm extends Component{
 
         const { id } = this.props.match.params;
 
-        axios
-            .put(`/api/movies/${id}`, this.state.values)
+        axiosWithoutAuth()
+            .put(`/movies/${id}`, this.state.values)
             .then(res => {
                 console.log(res);
             })
@@ -101,4 +103,4 @@ class MovieForm extends Component{
     }
 }
 
-export default MovieForm;
+export default withRouter(MovieForm);
